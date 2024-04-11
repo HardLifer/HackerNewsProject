@@ -1,0 +1,16 @@
+@HackerNewsBambooOpenApi_HostAddress = http://localhost:5088
+
+GET {{HackerNewsBambooOpenApi_HostAddress}}/api/HackerNews/GetHackerNewsStoriesIds
+Accept: application/json
+
+###
+
+GET {{HackerNewsBambooOpenApi_HostAddress}}/api/HackerNews/GetHackerNewsItemById?id=39998849
+Accept: application/json
+
+###
+
+GET {{HackerNewsBambooOpenApi_HostAddress}}/api/HackerNews/GetBestStories?countOfBestStoriesToReturn=5
+Accept: application/json
+
+###
