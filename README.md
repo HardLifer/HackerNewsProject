@@ -6,7 +6,7 @@ Here is my solution for the test task that I received from Danys
 
 Solution fast, simple, and well-tested for the API
 
-U can run it using VS, VS Code, prepared `.http` file inside of the project and ofc Docker container 
+U can run it using VS, VS Code, prepared `.http` file inside of the project, Postman and ofc Docker container 
 
 I had a few possible solutions for "efficiently service large numbers of requests without risking overloading "
 1. Rate limit for calling API ( our WebAPI Client )
