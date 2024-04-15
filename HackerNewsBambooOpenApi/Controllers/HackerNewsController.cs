@@ -100,16 +100,14 @@ namespace HackerNewsBambooOpenApi.Controllers
 
                 var storiesToRetrieveIds = cachedBestStoriesIds.Take(countOfBestStoriesToReturn);
 
-                List<int> nonExistingItemsIds = new List<int>();
+                List<int> nonExistingItemsIds = storiesToRetrieveIds.ToList();
 
-                var cachedHackerNewsItemsIds = _memoryCache.Get<List<HackerNewsItem>>(Constants.CacheKeyForBestStoriesEntities)?.Select(ent => ent.Id).ToList();
-                if (cachedHackerNewsItemsIds != null) 
+                var cachedHackerNewsItems = _memoryCache.Get<List<HackerNewsItem>>(Constants.CacheKeyForBestStoriesEntities);
+                var cachedHackerNewsItemsIds = cachedHackerNewsItems?.Select(ent => ent.Id).ToList();
+
+                if (cachedHackerNewsItemsIds != null && cachedHackerNewsItemsIds.Count > 0) 
                 {
                     nonExistingItemsIds = storiesToRetrieveIds.Where(id => !cachedHackerNewsItemsIds.Contains(id)).ToList();
-                }
-                else
-                {
-                    nonExistingItemsIds = storiesToRetrieveIds.ToList();
                 }
 
                 var hackerNewsItems = new List<HackerNewsItem>();
@@ -123,22 +121,25 @@ namespace HackerNewsBambooOpenApi.Controllers
 
                 if (hackerNewsItems.Count > 0)
                 {
-                    var cachedItems = _memoryCache.Get<List<HackerNewsItem>>(Constants.CacheKeyForBestStoriesEntities)?.ToList();
-                    if (cachedItems != null)
+                    if (cachedHackerNewsItems != null)
                     {
-                        cachedItems!.AddRange(hackerNewsItems);
+                        cachedHackerNewsItems!.AddRange(hackerNewsItems);
 
                         _memoryCache.Remove(Constants.CacheKeyForBestStoriesEntities);
 
-                        _memoryCache.Set(Constants.CacheKeyForBestStoriesEntities, cachedItems, _cacheEntryOptions);
+                        _memoryCache.Set(Constants.CacheKeyForBestStoriesEntities, cachedHackerNewsItems, _cacheEntryOptions);
                     }
                     else
                     {
                         _memoryCache.Set(Constants.CacheKeyForBestStoriesEntities, hackerNewsItems, _cacheEntryOptions);
                     }
                 }
+                else
+                {
+                    hackerNewsItems = cachedHackerNewsItems;
+                }
 
-                return Ok(hackerNewsItems.OrderByDescending(ent => ent.Score));
+                return Ok(hackerNewsItems?.OrderByDescending(ent => ent.Score));
             }
             catch (Exception ex)
             {
