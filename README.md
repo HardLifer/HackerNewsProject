@@ -1,8 +1,5 @@
 # HackerNewsProject
  The solution for Hacker News test task
-Hi guys
-
-Here is my solution for the test task that I received from Danys
 
 Solution fast, simple, and well-tested for the API
 
